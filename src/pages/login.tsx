@@ -8,8 +8,8 @@ export default function Login() {
       console.log("form")
       // api送信
     }} >
-      <label>email<input type="email" autoComplete="username"/></label>
-      <label >パスワード<input type="password" autoComplete="current-password" name="password" /></label>
+      <label>email<input type="email" autoComplete="username" /></label>
+      <label>パスワード<input type="password" autoComplete="current-password" /></label>
       <button>ログイン</button>
     </form>
   )
