@@ -23,7 +23,7 @@ export default function Login() {
           if (res.status === 200) {
             console.log('success')
             console.log(res.body)
-            router.push('/mypage')
+            router.push('/users')
           } else {
             // エラーメッセージの表示
             console.log('failure')

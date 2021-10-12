@@ -1,6 +1,7 @@
 import express from 'express'
 import next from 'next'
-import {type} from "os";
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -12,7 +13,12 @@ app.prepare().then(() => {
 
   server.use(express.json())
 
-  server.post('/api/login', (req, res) => {
+  server.get('/api/users', async (req, res) => {
+    const users = await prisma.user.findMany()
+    res.send(users)
+  })
+
+  server.post('/api/login', async (req, res) => {
     const data: { email?: unknown; password?: unknown } = req.body
     if (typeof data.email !== "string") {
       return res.status(400).end()
@@ -21,7 +27,8 @@ app.prepare().then(() => {
       return res.status(400).end()
     }
     // 本来はDBの値をチェック
-    if (data.email.startsWith('karube')) {
+    const user = await prisma.user.findFirst({where: {email: data.email, passwordHash: data.password}})
+    if (user) {
       res.send('OK')
     } else {
       res.status(401).end()
