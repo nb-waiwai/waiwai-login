@@ -1,6 +1,7 @@
 import express from 'express'
 import next from 'next'
 import { PrismaClient } from '@prisma/client'
+import {toHash} from "./toHash";
 const prisma = new PrismaClient()
 
 const port = parseInt(process.env.PORT || '3000', 10)
@@ -27,7 +28,7 @@ app.prepare().then(() => {
       return res.status(400).end()
     }
     // 本来はDBの値をチェック
-    const user = await prisma.user.findFirst({where: {email: data.email, passwordHash: data.password}})
+    const user = await prisma.user.findFirst({where: {email: data.email, passwordHash: toHash(data.password)}})
     if (user) {
       res.send('OK')
     } else {
